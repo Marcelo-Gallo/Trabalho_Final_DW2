@@ -1,18 +1,9 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+@extends('layouts.main')
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+@section('title', 'Produtos')
 
-    <title>Laravel</title>
+@section('content')
 
-    {{-- O diretório public é o "barra", sendo este a raiz do projeto --}}
-    <link rel="stylesheet" href="/css/styles.css">
-    <script src="/js/scripts.js"></script> 
-</head>
-<body>
-    <h1>Tela de produtos</h1>
-    
-</body>
-</html>
+<h1>Tela de produtos</h1>
+
+@endsection
