@@ -4,24 +4,17 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Models\Event;
+
 class EventController extends Controller
 {
     //|"index action" ou "a barra" |
     public function index() {
-        $nome = "Marcelo";
-        $idade = 20;
 
-        $array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+        //metodo ORM all() retorna todos os eventos do banco
+        $events = Event::all();
 
-        $nomes = ["João", "Maria", "José", "Ana", "Pedro"];
-
-        return view('welcome', [
-            'nome' => $nome,
-            'idade' => $idade,
-            'profissao' => 'Pesquisador',
-            'array' => $array,
-            'nomes' => $nomes,
-        ]);
+        return view('welcome', ['events' => $events]);
     }
 
     public function create() {
