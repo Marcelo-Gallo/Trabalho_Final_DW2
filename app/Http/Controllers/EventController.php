@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Event;
 
+
 class EventController extends Controller
 {
     //|"index action" ou "a barra" |
@@ -55,6 +56,9 @@ class EventController extends Controller
 
             $event->image = $imageName;
         }
+
+        $user = auth()->user();
+        $event->user_id = $user->id;
 
         $event->save();
 
