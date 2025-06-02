@@ -11,10 +11,21 @@ class EventController extends Controller
     //|"index action" ou "a barra" |
     public function index() {
 
-        //metodo ORM all() retorna todos os eventos do banco
-        $events = Event::all();
+        $search = request('search');
 
-        return view('welcome', ['events' => $events]);
+        if($search){
+        
+            $events = Event::where([
+                ['title', 'like', '%'.$search.'%']
+            ])->get();
+
+        } else {
+            //metodo ORM all() retorna todos os eventos do banco
+            $events = Event::all();
+            
+        }
+
+        return view('welcome', ['events' => $events], ['search' => $search]);
     }
 
     public function create() {
