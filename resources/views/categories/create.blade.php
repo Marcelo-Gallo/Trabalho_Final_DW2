@@ -3,15 +3,23 @@
 @section('title', 'Nova Categoria')
 
 @section('content')
-<div class="col-md-6 offset-md-3">
-    <h1>Nova Categoria</h1>
-    <form action="/categories" method="POST">
-        @csrf
-        <div class="form-group">
-            <label for="nome">Nome:</label>
-            <input type="text" class="form-control" id="nome" name="nome" required>
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h2 class="fw-bold mb-4">Nova Categoria</h2>
+                    <form action="/categories" method="POST">
+                        @csrf
+                        <div class="mb-3">
+                            <label for="nome" class="form-label">Nome:</label>
+                            <input type="text" class="form-control" id="nome" name="nome" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Salvar</button>
+                    </form>
+                </div>
+            </div>
         </div>
-        <button type="submit" class="btn btn-primary mt-2">Salvar</button>
-    </form>
+    </div>
 </div>
 @endsection

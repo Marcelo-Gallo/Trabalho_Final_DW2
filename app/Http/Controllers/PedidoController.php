@@ -27,63 +27,95 @@ class PedidoController extends Controller
 
     public function addToCart(Request $request)
     {
-        $cart = session()->get('cart', []);
-
-        $productId = $request->produto_id;
-        $quantity = $request->quantidade ?? 1;
-
-        if (isset($cart[$productId])) {
-            $cart[$productId] += $quantity;
-        } else {
-            $cart[$productId] = $quantity;
+        $user = auth()->user();
+        if ($user->is_admin) {
+            return redirect('/products')->with('msg', 'Administradores não podem efetuar compras.');
         }
+        $produtoId = $request->produto_id;
+        $quantidade = $request->quantidade ?? 1;
 
-        session(['cart' => $cart]);
+        // Busca ou cria o carrinho do usuário
+        $carrinho = $user->carrinho()->firstOrCreate(['user_id' => $user->id]);
+
+        // Adiciona ou atualiza o produto no carrinho
+        $existing = $carrinho->produtos()->where('produto_id', $produtoId)->first();
+        if ($existing) {
+            $carrinho->produtos()->updateExistingPivot($produtoId, [
+                'quantidade' => $existing->pivot->quantidade + $quantidade
+            ]);
+        } else {
+            $carrinho->produtos()->attach($produtoId, ['quantidade' => $quantidade]);
+        }
 
         return redirect()->back()->with('msg', 'Produto adicionado ao carrinho!');
     }
 
     public function viewCart()
     {
-        $cart = session()->get('cart', []);
-        $products = \App\Models\Produto::whereIn('id', array_keys($cart))->get();
+        $user = auth()->user();
+        if ($user->is_admin) {
+            return redirect('/products')->with('msg', 'Administradores não podem efetuar compras.');
+        }
+        $carrinho = $user->carrinho;
+        $produtos = $carrinho ? $carrinho->produtos : collect();
 
-        return view('pedidos.cart', ['products' => $products, 'cart' => $cart]);
+        return view('pedidos.cart', [
+            'products' => $produtos,
+            'cart' => $carrinho ? $carrinho->produtos->pluck('pivot.quantidade', 'id')->toArray() : []
+        ]);
     }
 
 
     public function checkout()
     {
-        $cart = session()->get('cart', []);
-        if (empty($cart)) {
+        $user = auth()->user();
+        if ($user->is_admin) {
+            return redirect('/products')->with('msg', 'Administradores não podem efetuar compras.');
+        }
+        $carrinho = $user->carrinho;
+        $products = $carrinho ? $carrinho->produtos : collect();
+        $cart = $carrinho ? $carrinho->produtos->pluck('pivot.quantidade', 'id')->toArray() : [];
+
+        if ($products->isEmpty()) {
             return redirect('/products')->with('msg', 'Seu carrinho está vazio!');
         }
 
-        $products = \App\Models\Produto::whereIn('id', array_keys($cart))->get();
         return view('pedidos.checkout', ['products' => $products, 'cart' => $cart]);
     }
 
     public function store(Request $request)
     {
-        $cart = session()->get('cart', []);
+        $user = auth()->user();
+        if ($user->is_admin) {
+            return redirect('/products')->with('msg', 'Administradores não podem efetuar compras.');
+        }
+        $carrinho = $user->carrinho;
+        $cart = $carrinho ? $carrinho->produtos->pluck('pivot.quantidade', 'id')->toArray() : [];
+        $products = $carrinho ? $carrinho->produtos : collect();
+
         if (empty($cart)) {
             return redirect('/products')->with('msg', 'Seu carrinho está vazio!');
         }
 
         $pedido = new \App\Models\Pedido();
-        $pedido->user_id = Auth::id();
+        $pedido->user_id = $user->id;
         $pedido->status = 'Pendente';
+        $pedido->data_pedido = now();
+        $pedido->total = $products->sum(function($product) use ($cart) {
+            return ($cart[$product->id] ?? $product->pivot->quantidade) * $product->preco;
+        });
         $pedido->save();
 
         foreach ($cart as $productId => $quantity) {
-            $product = \App\Models\Produto::find($productId);
+            $product = $products->find($productId);
             $pedido->produtos()->attach($productId, [
                 'quantidade' => $quantity,
                 'preco_unitario' => $product->preco,
             ]);
         }
 
-        session()->forget('cart');
+        // Limpa o carrinho do usuário
+        $carrinho->produtos()->detach();
 
         return redirect('/pedidos')->with('msg', 'Pedido realizado com sucesso!');
     }

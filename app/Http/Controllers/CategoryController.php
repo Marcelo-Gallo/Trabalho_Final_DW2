@@ -9,8 +9,15 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        $categories = Categoria::all();
-        return view('categories.index', ['categories' => $categories]);
+        $categories = \App\Models\Categoria::orderBy('nome')->get();
+
+        if (auth()->user() && auth()->user()->is_admin) {
+            // Admin vê a tela de gerenciamento
+            return view('categories.index', ['categories' => $categories]);
+        } else {
+            // Usuário comum vê a lista para filtrar produtos
+            return view('categories.list', ['categories' => $categories]);
+        }
     }
 
     public function create()

@@ -11,16 +11,28 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search');
+        $categoryId = $request->input('category');
+
+        $query = \App\Models\Produto::query();
 
         if ($search) {
-            $products = \App\Models\Produto::where('nome', 'like', '%' . $search . '%')->get();
-        } else {
-            $products = \App\Models\Produto::all();
+            $query->where('nome', 'like', '%' . $search . '%');
         }
+        if ($categoryId) {
+            $query->where('categoria_id', $categoryId);
+            $selectedCategory = \App\Models\Categoria::find($categoryId);
+        } else {
+            $selectedCategory = null;
+        }
+
+        $products = $query->get();
+        $categories = \App\Models\Categoria::orderBy('nome')->get();
 
         return view('welcome', [
             'products' => $products,
-            'search' => $search
+            'search' => $search,
+            'selectedCategory' => $selectedCategory,
+            'categories' => $categories
         ]);
     }
 

@@ -9,7 +9,7 @@ class CreatePedidosTable extends Migration
     {
         Schema::create('pedidos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('cliente_id')->constrained('clientes');
+            $table->foreignId('user_id')->constrained('users');
             $table->date('data_pedido');
             $table->decimal('total', 10, 2);
             $table->string('status')->default('Pendente');

@@ -24,54 +24,77 @@
 
 <body>
     <header>
-        <nav class="navbar navbar-expand-lg navbar-light">
-            <div class="collapse navbar-collapse" id="navbar">
-                <a href="/" class="navbar-brand">
-                    <img src="/img/hdcevents_logo.png" alt="HDC Events Logo">
+        <nav class="navbar navbar-expand-lg">
+            <div class="container-fluid">
+                <a href="/" class="navbar-brand d-flex align-items-center">
+                    <img src="/img/Gallo_Bertolli.png" alt="Gallo_Bertolli" style="height:50px;">
+                    <span class="ms-2 fw-bold text-dark">G&B Supplies</span>
                 </a>
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a href="/products" class="nav-link">Produtos</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/categories" class="nav-link">Categorias</a>
-                    </li>
-                    @auth
-    <li class="nav-item">
-        <a href="/profile" class="nav-link">Meu Perfil</a>
-    </li>
-    @if(auth()->user()->is_admin)
-        <li class="nav-item">
-            <a href="/products/create" class="nav-link">Cadastrar Produto</a>
-        </li>
-    @endif
-    <li class="nav-item">
-        <a href="/pedidos" class="nav-link">Meus Pedidos</a>
-    </li>
-    <li class="nav-item">
-        <a href="/cart" class="nav-link">Carrinho</a>
-    </li>
-    <li class="nav-item">
-        <form action="/logout" method="POST">
-            @csrf
-            <a href="/logout" 
-                class="nav-link"
-                onclick="event.preventDefault();
-                    this.closest('form').submit();">
-                Sair
-            </a>
-        </form>
-    </li>
-@endauth
-                    @guest
-                    <li class="nav-item">
-                        <a href="/login" class="nav-link">Entrar</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/register" class="nav-link">Cadastre-se</a>
-                    </li>
-                    @endguest
-                </ul>
+                <!-- Botão toggler para mobile -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbar">
+                    <ul class="navbar-nav ms-auto align-items-lg-center gap-2">
+                        <!-- <li class="nav-item">
+                            <a href="/products" class="nav-link">Produtos</a>
+                        </li> -->
+                        <!-- <li class="nav-item">
+                            <a href="/categories" class="nav-link">Categorias</a>
+                        </li> -->
+                        @auth
+                            @if(auth()->user()->is_admin)
+                                <li class="nav-item">
+                                    <a href="/products/create" class="nav-link text-warning fw-semibold">
+                                        <i class="bi bi-plus-circle me-1"></i> Cadastrar Produto
+                                    </a>
+                                </li>
+                            @endif
+                            <li class="nav-item">
+                                <a href="/cart" class="nav-link position-relative">
+                                    <ion-icon name="cart-outline" style="font-size: 1.5rem; vertical-align: middle;"></ion-icon>
+                                    <span class="d-none d-lg-inline">Carrinho</span>
+                                </a>
+                            </li>
+                            <!-- Dropdown Perfil -->
+                            <li class="nav-item dropdown custom-profile-dropdown">
+                                <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <img src="{{ Auth::user()->profile_photo_url ?? '/img/default-user.png' }}" alt="Avatar" class="rounded-circle me-2 border" style="width:32px;height:32px;">
+                                    <span class="fw-semibold">{{ Auth::user()->name }}</span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="profileDropdown">
+                                    <li>
+                                        <a class="dropdown-item" href="/profile">
+                                            <i class="bi bi-person-circle me-2"></i>Meu Perfil
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="/pedidos">
+                                            <ion-icon name="list-outline" style="vertical-align: middle; margin-right: 8px;"></ion-icon>
+                                            Meus Pedidos
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <form action="/logout" method="POST" class="d-inline">
+                                            @csrf
+                                            <button type="submit" class="dropdown-item">
+                                                <i class="bi bi-box-arrow-right me-2"></i>Sair
+                                            </button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </li>
+                        @endauth
+                        @guest
+                            <li class="nav-item">
+                                <a href="/login" class="nav-link">Entrar</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/register" class="nav-link">Cadastre-se</a>
+                            </li>
+                        @endguest
+                    </ul>
+                </div>
             </div>
         </nav>
     </header>
@@ -89,12 +112,50 @@
     </div>
 </main>
 
-<footer>
-    <p>HDC Events &copy; 2025</p>
+<footer class="bg-dark text-light py-4 mt-5">
+    <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center">
+        <div class="mb-3 mb-md-0">
+            <span class="fw-bold">G&B Supplies &copy; 2025</span>
+        </div>
+        <div>
+            <a href="/contact" class="text-light text-decoration-none me-3" title="Fale conosco">
+                <i class="bi bi-envelope me-1"></i>Contato
+            </a>
+            <a href="/github" class="text-light text-decoration-none me-3">
+                <i class="bi bi-github"></i> GitHub
+            </a>
+        </div>
+    </div>
 </footer>
 <!-- Ion Icons-->
 <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+<!-- Bootstrap Icons CDN -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
+<style>
+    /* Customização do dropdown do perfil */
+    .custom-profile-dropdown .dropdown-toggle {
+        background: none !important;
+        border: none !important;
+        color: #212529 !important;
+        font-weight: 500;
+    }
+    .custom-profile-dropdown .dropdown-menu {
+        min-width: 180px;
+    }
+    .custom-profile-dropdown .dropdown-item i {
+        color: #F2A340;
+    }
+    .navbar-nav .nav-link.active, .navbar-nav .nav-link:focus, .navbar-nav .nav-link:hover {
+        color: #F2A340 !important;
+    }
+    .navbar-brand span {
+        font-size: 1.2rem;
+        letter-spacing: 1px;
+    }
+</style>
 </body>
 
 </html>

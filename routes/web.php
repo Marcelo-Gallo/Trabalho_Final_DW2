@@ -26,12 +26,20 @@ Route::put('/products/{id}', [\App\Http\Controllers\ProductController::class, 'u
 Route::delete('/products/{id}', [\App\Http\Controllers\ProductController::class, 'destroy'])->middleware('auth');
 
 // Categorias
-Route::get('/categories', [\App\Http\Controllers\CategoryController::class, 'index'])->middleware('auth');
-Route::get('/categories/create', [\App\Http\Controllers\CategoryController::class, 'create'])->middleware('auth');
-Route::post('/categories', [\App\Http\Controllers\CategoryController::class, 'store'])->middleware('auth');
-Route::get('/categories/{id}/edit', [\App\Http\Controllers\CategoryController::class, 'edit'])->middleware('auth');
-Route::put('/categories/{id}', [\App\Http\Controllers\CategoryController::class, 'update'])->middleware('auth');
-Route::delete('/categories/{id}', [\App\Http\Controllers\CategoryController::class, 'destroy'])->middleware('auth');
+Route::get('/categories', [\App\Http\Controllers\CategoryController::class, 'index']);
+Route::get('/categories/create', [\App\Http\Controllers\CategoryController::class, 'create'])->middleware('auth', 'is_admin');
+Route::post('/categories', [\App\Http\Controllers\CategoryController::class, 'store'])->middleware('auth', 'is_admin');
+Route::get('/categories/{id}/edit', [\App\Http\Controllers\CategoryController::class, 'edit'])->middleware('auth', 'is_admin');
+Route::put('/categories/{id}', [\App\Http\Controllers\CategoryController::class, 'update'])->middleware('auth', 'is_admin');
+Route::delete('/categories/{id}', [\App\Http\Controllers\CategoryController::class, 'destroy'])->middleware('auth', 'is_admin');
 
 Route::get('/profile', [\App\Http\Controllers\UserController::class, 'edit'])->middleware('auth');
 Route::put('/profile', [\App\Http\Controllers\UserController::class, 'update'])->middleware('auth');
+
+Route::get('/contact', function () {
+    return view('contact');
+});
+
+Route::get('/github', function () {
+    return view('github');
+});

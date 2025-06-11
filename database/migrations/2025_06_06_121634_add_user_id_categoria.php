@@ -8,9 +8,9 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('pedidos', function (Blueprint $table) {
-            $table->foreignId('user_id')->constrained()->after('id');
-        });
+        // Schema::table('pedidos', function (Blueprint $table) {
+        //     $table->foreignId('user_id')->constrained()->after('id');
+        // });
     }
 
     public function down(): void

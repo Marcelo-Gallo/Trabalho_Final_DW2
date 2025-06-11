@@ -57,6 +57,11 @@ class User extends Authenticatable
         return $this->hasMany('\App\Models\Pedido');
     }
 
+    public function carrinho()
+    {
+        return $this->hasOne(\App\Models\Carrinho::class);
+    }
+
 
 
 
