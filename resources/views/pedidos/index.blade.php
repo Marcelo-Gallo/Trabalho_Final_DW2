@@ -1,12 +1,10 @@
-
 @extends('layouts.main')
 
-@section('title', 'Dashboard')
+@section('title', 'Pedidos')
 
 @section('content')
-
 <div class="col-md-10 offset-md-1 dashboard-title-container">
-    <h1>Meus Pedidos</h1>
+    <h1>Pedidos</h1>
 </div>
 
 <div class="col-md-10 offset-md-1 dashboard-events-container">
@@ -38,13 +36,7 @@
         </tbody>
     </table>
     @else
-    <p>Você ainda não fez nenhum pedido. <a href="/products">Ver produtos</a></p>
+    <p>Você ainda não fez nenhum pedido.</p>
     @endif
 </div>
-
-<div class="col-md-10 offset-md-1 dashboard-title-container">
-    <h1>Carrinho</h1>
-    <a href="/cart" class="btn btn-success">Ir para o carrinho</a>
-</div>
-
 @endsection

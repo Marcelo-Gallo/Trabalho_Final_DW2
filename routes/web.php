@@ -1,22 +1,37 @@
 <?php
 
-use App\Http\Controllers\EventController;
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\RegisterController;
 
-Route::get('/', [EventController::class, 'index']);
-Route::get('/events/create', [EventController::class, 'create'])->middleware('auth');
-Route::get('/events/{id}', [EventController::class, 'show']);
-Route::post('/events', [EventController::class, 'store']);
-Route::delete('/events/{id}', [EventController::class, 'destroy'])->middleware('auth');
-Route::get('/events/edit/{id}', [EventController::class, 'edit'])->middleware('auth');
-Route::put('/events/update/{id}', [EventController::class, 'update'])->middleware('auth');
+Route::get('/', [\App\Http\Controllers\ProductController::class, 'index']);
 
-Route::get('/contact', function () {
-    return view('contact');
-});
+Route::get('/dashboard', [DashboardController::class, 'index'])->middleware('auth');
 
-Route::get('/dashboard', [EventController::class, 'dashboard'])->middleware('auth');
+Route::post('/cart/add', [\App\Http\Controllers\PedidoController::class, 'addToCart'])->name('cart.add');
+Route::get('/cart', [\App\Http\Controllers\PedidoController::class, 'viewCart'])->name('cart.view');
+Route::get('/checkout', [\App\Http\Controllers\PedidoController::class, 'checkout'])->name('checkout');
+Route::post('/pedidos', [\App\Http\Controllers\PedidoController::class, 'store'])->name('pedidos.store');
 
-Route::post('/events/join/{id}', [EventController::class, 'joinEvent'])->middleware('auth');
+Route::get('/pedidos', [\App\Http\Controllers\PedidoController::class, 'index'])->middleware('auth');
+Route::get('/pedidos/{id}', [\App\Http\Controllers\PedidoController::class, 'show'])->middleware('auth');
 
-Route::delete('/events/leave/{id}', [EventController::class, 'leaveEvent'])->middleware('auth');
+// Produtos
+Route::get('/products', [\App\Http\Controllers\ProductController::class, 'index']);
+Route::get('/products/create', [\App\Http\Controllers\ProductController::class, 'create'])->middleware('auth');
+Route::post('/products', [\App\Http\Controllers\ProductController::class, 'store'])->middleware('auth');
+Route::get('/products/{id}', [\App\Http\Controllers\ProductController::class, 'show']);
+Route::get('/products/{id}/edit', [\App\Http\Controllers\ProductController::class, 'edit'])->middleware('auth');
+Route::put('/products/{id}', [\App\Http\Controllers\ProductController::class, 'update'])->middleware('auth');
+Route::delete('/products/{id}', [\App\Http\Controllers\ProductController::class, 'destroy'])->middleware('auth');
+
+// Categorias
+Route::get('/categories', [\App\Http\Controllers\CategoryController::class, 'index'])->middleware('auth');
+Route::get('/categories/create', [\App\Http\Controllers\CategoryController::class, 'create'])->middleware('auth');
+Route::post('/categories', [\App\Http\Controllers\CategoryController::class, 'store'])->middleware('auth');
+Route::get('/categories/{id}/edit', [\App\Http\Controllers\CategoryController::class, 'edit'])->middleware('auth');
+Route::put('/categories/{id}', [\App\Http\Controllers\CategoryController::class, 'update'])->middleware('auth');
+Route::delete('/categories/{id}', [\App\Http\Controllers\CategoryController::class, 'destroy'])->middleware('auth');
+
+Route::get('/profile', [\App\Http\Controllers\UserController::class, 'edit'])->middleware('auth');
+Route::put('/profile', [\App\Http\Controllers\UserController::class, 'update'])->middleware('auth');

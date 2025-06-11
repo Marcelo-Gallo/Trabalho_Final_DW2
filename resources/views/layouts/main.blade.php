@@ -31,38 +31,46 @@
                 </a>
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a href="/" class="nav-link">Eventos</a>
+                        <a href="/products" class="nav-link">Produtos</a>
                     </li>
                     <li class="nav-item">
-                        <a href="/events/create" class="nav-link">Criar Eventos</a>
+                        <a href="/categories" class="nav-link">Categorias</a>
                     </li>
-
                     @auth
-                    <li class="nav-item">
-                        <a href="/dashboard" class="nav-link">Meus Eventos</a>
-                    </li>
-                    <li class="nav-item">
-                        <form action="/logout" method="POST">
-                            @csrf
-                            <a href="/logout" 
-                                class="nav-link"
-                                onclick="event.preventDefault();
-                                    this.closest('form').submit();">
-                            Sair
-                            </a>
-                        </form>
-                    </li>
-                    @endauth
-
+    <li class="nav-item">
+        <a href="/profile" class="nav-link">Meu Perfil</a>
+    </li>
+    @if(auth()->user()->is_admin)
+        <li class="nav-item">
+            <a href="/products/create" class="nav-link">Cadastrar Produto</a>
+        </li>
+    @endif
+    <li class="nav-item">
+        <a href="/pedidos" class="nav-link">Meus Pedidos</a>
+    </li>
+    <li class="nav-item">
+        <a href="/cart" class="nav-link">Carrinho</a>
+    </li>
+    <li class="nav-item">
+        <form action="/logout" method="POST">
+            @csrf
+            <a href="/logout" 
+                class="nav-link"
+                onclick="event.preventDefault();
+                    this.closest('form').submit();">
+                Sair
+            </a>
+        </form>
+    </li>
+@endauth
                     @guest
                     <li class="nav-item">
                         <a href="/login" class="nav-link">Entrar</a>
                     </li>
                     <li class="nav-item">
-                        <a href="/register" class="nav-link">Cadastrar</a>
+                        <a href="/register" class="nav-link">Cadastre-se</a>
                     </li>
                     @endguest
-
                 </ul>
             </div>
         </nav>
