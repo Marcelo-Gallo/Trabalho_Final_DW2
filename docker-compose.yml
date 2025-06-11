@@ -1,0 +1,63 @@
+version: '3.8'
+
+services:
+  # ======================================================= #
+  # SERVIÇO: app (PHP + APACHE)                             #
+  # ======================================================= #
+  app:
+    build:
+      context: .
+      dockerfile: Docker/app/Dockerfile
+    container_name: laravel_app_apache
+    restart: unless-stopped
+    ports:
+      - "8000:80"
+    volumes:
+      - ./src:/var/www/html
+      - ./Docker/app/000-default.conf:/etc/apache2/sites-available/000-default.conf
+    depends_on:
+      - db
+    networks:
+      - laravel
+
+  # ======================================================= #
+  # SERVIÇO: bd (banco mysql)                               #
+  # ======================================================= #
+  db:
+    image: mysql:8.0
+    container_name: laravel_db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_USER: ${DB_USERNAME}
+    volumes:
+      - db-data:/var/lib/mysql
+    networks:
+      - laravel
+
+  # ======================================================= #
+  # SERVIÇO: PHPMYADMIN                                     #
+  # ======================================================= #
+  phpmyadmin:
+    image: phpmyadmin
+    container_name: laravel_pma
+    restart: unless-stopped
+    ports:
+      - "8081:80" 
+    environment:
+      PMA_HOST: db # <-- Diz ao PMA para se conectar ao serviço 'db'
+      PMA_PORT: 3306
+    networks:
+      - laravel
+    depends_on:
+      - db
+
+networks:
+  laravel:
+    driver: bridge
+
+volumes:
+  db-data:
+    driver: local
