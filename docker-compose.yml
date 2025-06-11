@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # ======================================================= #
   # SERVIÇO: app (PHP + APACHE)                             #
@@ -13,7 +11,7 @@ services:
     ports:
       - "8000:80"
     volumes:
-      - ./src:/var/www/html
+      - ./:/var/www/html
       - ./Docker/app/000-default.conf:/etc/apache2/sites-available/000-default.conf
     depends_on:
       - db
