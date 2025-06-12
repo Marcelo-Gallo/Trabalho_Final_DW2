@@ -29,9 +29,9 @@
                             </button>
                         </form>
                     @else
-                        <button class="btn btn-success" disabled>
-                            <i class="bi bi-cart-plus"></i> Adicionar ao Carrinho
-                        </button>
+                        <a href="/products/{{ $product->id }}/edit" class="btn btn-info">
+                            <i class="bi bi-pencil"></i> Editar Produto
+                        </a>
                     @endif
                 @endauth
                 @guest
