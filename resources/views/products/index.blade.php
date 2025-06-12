@@ -34,12 +34,16 @@
                             <a href="/products/{{ $product->id }}" class="btn btn-outline-primary w-100 mb-2">
                                 <i class="bi bi-eye"></i> Ver detalhes
                             </a>
-                            <a href="/products/{{ $product->id }}/edit" class="btn btn-info w-100 mb-2">Editar</a>
-                            <form action="/products/{{ $product->id }}" method="POST" class="d-grid">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger w-100">Deletar</button>
-                            </form>
+                            @auth
+                                @if(auth()->user()->is_admin)
+                                    <a href="/products/{{ $product->id }}/edit" class="btn btn-info w-100 mb-2">Editar</a>
+                                    <form action="/products/{{ $product->id }}" method="POST" class="d-grid">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger w-100">Deletar</button>
+                                    </form>
+                                @endif
+                            @endauth
                         </div>
                     </div>
                 </div>

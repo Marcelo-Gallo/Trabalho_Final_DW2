@@ -80,13 +80,19 @@ class ProductController extends Controller
 
     public function edit($id)
     {
-        $product = Produto::findOrFail($id);
-        $categories = Categoria::all();
+        if (!auth()->user() || !auth()->user()->is_admin) {
+            abort(403, 'Acesso não autorizado.');
+        }
+        $product = \App\Models\Produto::findOrFail($id);
+        $categories = \App\Models\Categoria::all();
         return view('products.edit', ['product' => $product, 'categories' => $categories]);
     }
 
     public function update(Request $request, $id)
     {
+        if (!auth()->user() || !auth()->user()->is_admin) {
+            abort(403, 'Acesso não autorizado.');
+        }
         $data = $request->all();
 
         // Upload de imagem (opcional)

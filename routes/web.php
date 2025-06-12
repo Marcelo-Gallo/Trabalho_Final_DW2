@@ -21,9 +21,9 @@ Route::get('/products', [\App\Http\Controllers\ProductController::class, 'index'
 Route::get('/products/create', [\App\Http\Controllers\ProductController::class, 'create'])->middleware('auth');
 Route::post('/products', [\App\Http\Controllers\ProductController::class, 'store'])->middleware('auth');
 Route::get('/products/{id}', [\App\Http\Controllers\ProductController::class, 'show']);
-Route::get('/products/{id}/edit', [\App\Http\Controllers\ProductController::class, 'edit'])->middleware('auth');
-Route::put('/products/{id}', [\App\Http\Controllers\ProductController::class, 'update'])->middleware('auth');
-Route::delete('/products/{id}', [\App\Http\Controllers\ProductController::class, 'destroy'])->middleware('auth');
+Route::get('/products/{id}/edit', [\App\Http\Controllers\ProductController::class, 'edit'])->middleware('auth', 'is_admin');
+Route::put('/products/{id}', [\App\Http\Controllers\ProductController::class, 'update'])->middleware('auth', 'is_admin');
+Route::delete('/products/{id}', [\App\Http\Controllers\ProductController::class, 'destroy'])->middleware('auth', 'is_admin');
 
 // Categorias
 Route::get('/categories', [\App\Http\Controllers\CategoryController::class, 'index']);

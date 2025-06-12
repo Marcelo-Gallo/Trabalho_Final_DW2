@@ -7,7 +7,7 @@
 <div class="container py-4">
     <div class="row mb-4 align-items-center">
         <div class="col-md-8">
-            <h1 class="fw-bold mb-0">Produtos em destaque EDITADO!</h1>
+            <h1 class="fw-bold mb-0">Produtos em destaque</h1>
             @if ($search ?? false)
                 <h5 class="text-muted mt-2">Buscando por: <span class="fw-semibold">{{ $search }}</span></h5>
             @endif
