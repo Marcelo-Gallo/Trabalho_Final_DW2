@@ -32,6 +32,13 @@
                         <a href="/products/{{ $product->id }}/edit" class="btn btn-info">
                             <i class="bi bi-pencil"></i> Editar Produto
                         </a>
+                        <form action="/products/{{ $product->id }}" method="POST" class="d-inline ms-2">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger">
+                                <i class="bi bi-trash"></i> Deletar Produto
+                            </button>
+                        </form>
                     @endif
                 @endauth
                 @guest
