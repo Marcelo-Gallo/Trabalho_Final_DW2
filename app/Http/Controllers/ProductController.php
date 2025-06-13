@@ -111,6 +111,9 @@ class ProductController extends Controller
 
     public function destroy($id)
     {
+        if (!auth()->user() || !auth()->user()->is_admin) {
+            abort(403, 'Acesso não autorizado.');
+        }
         Produto::findOrFail($id)->delete();
         return redirect('/products')->with('msg', 'Produto removido com sucesso!');
     }
